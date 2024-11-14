@@ -1,69 +1,108 @@
 import matplotlib.pyplot as plt
 
-#Initial values X,Y
-Xs=[1]
-Ys=[1]
-Ts=[0]
 
-#Initial time
-t=0
-
-#Modeling accurace dt value
-dt=0.0001
-
-# Define some models
+# Define plotting functions for models
 
 #Exponential Growth
-def EG(x,a, dt):
-    x_new = x + dt*(a*x)
-    return(x_new, 0)
+def EG(x0, a, t_max, dt):
+    Xs = [x0]
+    t = 0
+    Ts= [t]
+    while t<t_max:
+        t += dt
+        x = Xs[-1]
+        Ts.append(t)
+        Xs.append(x + dt*(a*x))
+    plt.plot(Ts, Xs)
+    plt.show()
 
 #Logistic Growth
-def LG(x, a, k, dt):
-    x_new = x + dt*(a*x*(1-x/k))
-    return(x_new, 0)
+def LG(x0, a, k, t_max, dt):
+    Xs = [x0]
+    t = 0
+    Ts= [t]
+    while t<t_max:
+        t += dt
+        x = Xs[-1]
+        Ts.append(t)
+        Xs.append(x+ dt*(a*x*(1-x/k)))
+    plt.plot(Ts, Xs)
+    plt.show()
 
 #Lotka-Voltera
-def LV(x, y, gamma, dt):
-    x_new = x + dt*(x-x*y)
-    y_new = y + dt*gamma*(-y+x*y)
-    return(x_new, y_new)
+def LV(x0, y0, gamma, t_max, dt):
+    Xs = [x0]
+    Ys = [y0]
+    t = 0
+    Ts= [t]
+    while t < t_max:
+        t += dt
+        x,y = [Xs[-1], Ys[-1]]
+        Ts.append(t)
+        Xs.append(x+ dt*(x-x*y))
+        Ys.append(y + dt*gamma*(-y+x*y))
+    plt.plot(Ts, Xs)
+    plt.plot(Ts, Ys)
+    plt.show()
 
 #Competative Lotka-Voltera
-def CLV(x, y, gamma1, beta, gamma2, dt):
-    x_new = x + dt*x*(1-x-gamma1*y)
-    y_new = y + dt*beta*y*(1-y-gamma2*x)
-    return(x_new, y_new)
+def CLV(x0, y0, gamma1, beta, gamma2, t_max, dt):
+    Xs = [x0]
+    Ys = [y0]
+    t = 0
+    Ts= [t]
+    while t < t_max:
+        t += dt
+        x,y = [Xs[-1],Ys[-1]]
+        Ts.append(t)
+        Xs.append(x+ dt*x*(1-x-gamma1*y))
+        Ys.append(y + dt*beta*y*(1-y-gamma2*x))
+    plt.plot(Ts, Xs)
+    plt.plot(Ts, Ys)
+    plt.show()
 
 #Spruce Budworm
-def SBW(x,R,k,dt):
-    x_new = x + dt*( R*x*(1-x/k) - x*x/(1+x*x) )
-    return(x_new, 0)
+def SBW(x0, R, k, t_max, dt):
+    Xs = [x0]
+    t = 0
+    Ts= [t]
+    while t < t_max:
+        t += dt
+        x = Xs[-1]
+        Ts.append(t)
+        Xs.append(x + dt*( R*x*(1-x/k) - x*x/(1+x*x) ))
+    plt.plot(Ts, Xs)
+    plt.show()
 
 #Enzyme-Reaction
-def ERS(x,y,a,b,dt):
-    x_new = x + dt*(a-x+x*x*y)
-    y_new = y + dt*(b-x*x*y)
-    return(x_new, y_new)
+def ERS(x0, y0, a, b, t_max, dt):
+    Xs = [x0]
+    Ys = [y0]
+    t = 0
+    Ts= [t]
+    while t < t_max:
+        t+=dt
+        x,y = [Xs[-1],Ys[-1]]
+        Ts.append(t)
+        Xs.append(x+ dt*(a-x+x*x*y))
+        Ys.append(y + dt*(b-x*x*y))
+    plt.plot(Ts,Xs)
+    plt.plot(Ts,Ys)
+    plt.show()
 
 
 
 
-while t<75:
-    t=t+dt
-    #X,Y = EG(Xs[-1], a=1, dt=dt)
-    #X,Y = LG(Xs[-1], a=1, k=5, dt=dt)
-    #X,Y = LV(Xs[-1], Ys[-1], gamma=1 ,dt=dt)
-    #X,Y = CLV(Xs[-1], Ys[-1], gamma1=0.9, beta=0.5, gamma2=0.1, dt=dt)
-    #X,Y = SBW(Xs[-1], R=1, k=5, dt=dt)
-    #X,Y = ERS(Xs[-1], Ys[-1], a=0.1603746, b=0.6 ,dt=dt)
+if __name__ == '__main__':
+
+    dt = 0.0001
+    t_max = 75
+    x0 = 1
+    y0 = 0.9
     
-    Xs.append(X)
-    Ys.append(Y)
-    Ts.append(t)
-    
-
-plt.plot(Ts,Xs)
-# Comment out below if looking at 1D
-#plt.plot(Ts,Ys)
-plt.show()
+    #EG(x0, 1, t_max, dt)
+    #LG(x0, 1, 5, t_max, dt)
+    #LV(x0, y0, 0.9, t_max, dt)
+    #CLV(x0, y0, 0.5, 0.2, 0.3, t_max, dt)
+    #SBW(x0, 0.8, 5, t_max, dt)
+    #ERS(x0, y0, 0.19, 0.5, t_max, dt)
