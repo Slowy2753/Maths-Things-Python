@@ -31,7 +31,7 @@ Happy_Seq <- function(n){
 
 ## Method 1
 ```{r}
-imax=10^5
+imax=10^3
 happy <- c(1)
 sad <-c()
 cyc <-c() #This only gets the element of a cycle that was found first during the
