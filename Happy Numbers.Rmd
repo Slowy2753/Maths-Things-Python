@@ -1,0 +1,137 @@
+---
+title: "Happy Numbers"
+author: "Jonathan Mullett"
+date: "2025-03-30"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Defining the sequence step
+```{r}
+step <- function(n){
+  digits <- as.numeric(strsplit(as.character(abs(n)), "")[[1]])
+  return(sum(digits**2))
+}
+
+Happy_Seq <- function(n){
+  SEQ <- c(n)
+  t <- TRUE
+  while(t==TRUE){
+    new <- step(tail(SEQ, 1))
+    if(new==1){t <- FALSE}
+    else if(new %in% SEQ){t <- FALSE}
+    SEQ <- c(SEQ, new)
+  }
+  return(SEQ)
+}
+```
+
+## Method 1
+```{r}
+imax=10^5
+happy <- c(1)
+sad <-c()
+cyc <-c() #This only gets the element of a cycle that was found first during the
+          #sequence added to it each time
+
+for (i in 2:imax){
+  SEQ <- c()
+  
+  if (i %in% happy || i %in% sad){next}
+  
+  else{
+    SEQ <- c(SEQ, i)
+    t<- TRUE
+    while(t==TRUE){
+      new <- step(tail(SEQ, 1))
+      
+      if(new %in% sad){
+        sad <- c(sad, SEQ)
+        t<-FALSE}
+      else if(new %in% happy){
+        happy <- c(happy, SEQ)
+        t<-FALSE}
+      else if(new %in% SEQ){
+        sad <- c(sad, SEQ)
+        cyc_indecies <- which(SEQ==new)
+        cyc_indecies <- (cyc_indecies):(length(SEQ))
+        cyc <- c(cyc, SEQ[cyc_indecies])
+        t<-FALSE}
+      else{
+        SEQ <- c(SEQ, new)
+      }
+    }
+  }
+}
+```
+
+```{r}  
+print(happy)
+print(sad)
+print(cyc)
+```
+
+
+
+## Method 2
+```{r}
+squares <- (0:9)^2
+
+step.2 <- function(n) {
+  result <- 0
+  while (n > 0) {
+    result <- result + squares[(n %% 10)+1] # Add the square of the digit
+    n <- n %/% 10        # Remove the last digit
+  }
+  return(result)
+}
+```
+
+```{r}
+happy <- c(1)
+sad <-c()
+
+for (i in 2:999){
+  SEQ <- c()
+  
+  if (i %in% happy || i %in% sad){next}
+  
+  else{
+    SEQ <- c(SEQ, i)
+    t<- TRUE
+    while(t==TRUE){
+      new <- step.2(tail(SEQ, 1))
+      
+      if(new %in% sad){
+        sad <- c(sad, SEQ)
+        t<-FALSE}
+      else if(new %in% happy){
+        happy <- c(happy, SEQ)
+        t<-FALSE}
+      else if(new %in% SEQ){
+        sad <- c(sad, SEQ)
+        t<-FALSE}
+      else{
+        SEQ <- c(SEQ, new)
+      }
+    }
+  }
+}
+
+imax <- 10^7
+happy.array <- rep(FALSE, imax)
+for (i in 1:999){
+  if(i%in%happy){happy.array[i] <- TRUE}
+}
+
+for (i in 1000:imax){
+  if(happy.array[step.2(i)]==TRUE){happy.array[i] <- TRUE}
+}
+```
+
+
+```{r}
+```
