@@ -74,5 +74,5 @@ if __name__ == '__main__':
     t_end = time.time()
     print(t_end - t_start)
 
-    with open("happy_array.pkl", "wb") as file:
-        pickle.dump(happy_array, file)
+    #with open("happy_array.pkl", "wb") as file:
+    #    pickle.dump(happy_array, file)
