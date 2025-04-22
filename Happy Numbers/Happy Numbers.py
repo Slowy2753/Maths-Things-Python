@@ -12,7 +12,7 @@ def step(n):
     return result
 
 # Defines a function that returns all the happy numbers between 1 and 999
-# @njit (Works but slower due to time taken to complie into C)
+# @njit (Works but is slower)
 def happy_to_999():
     # Initialize happy and sad lists
     happy = [1]
