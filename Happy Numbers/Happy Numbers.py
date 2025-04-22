@@ -2,9 +2,9 @@ import time
 import pickle
 from numba import njit
 
-# step_2 is converted into c machiene code to run more quickly
+# step is converted into c machiene code to run more quickly
 @njit
-def step_2(n):
+def step(n):
     result = 0
     while n > 0:
         result += (n % 10) ** 2
@@ -12,6 +12,7 @@ def step_2(n):
     return result
 
 # Defines a function that returns all the happy numbers between 1 and 999
+# @njit (Works but slower due to time taken to complie into C)
 def happy_to_999():
     # Initialize happy and sad lists
     happy = [1]
@@ -26,7 +27,7 @@ def happy_to_999():
             seq.append(i)
             t = True
             while t:
-                new = step_2(seq[-1])
+                new = step(seq[-1])
                 
                 if new in sad:
                     sad.extend(seq)
@@ -45,13 +46,13 @@ def happy_to_999():
 def populate_happy_array1(happy):
     for i in range(1, 1000):
         if i in happy:
-            happy_array[i] = True
+            happy_array[i] = True      
 
 # Define a function that will populate number 1000 through imax       
 @njit
 def populate_happy_array2(happy_array, imax):
     for i in range(1000, imax):
-        if happy_array[step_2(i)]:  # Reference precomputed results
+        if happy_array[step(i)]:  # Reference precomputed happy numbers
             happy_array[i] = True
 
 
@@ -63,7 +64,7 @@ if __name__ == '__main__':
     
     # Squares of digits from 0 to 9
     squares = [i**2 for i in range(10)]
-    happy_array = bytearray(imax)
+    happy_array = bytearray(imax)  #Creates a byte array of length imax
     
     # Populate the happy array for numbers 1 through 999
     populate_happy_array1(happy_to_999())
