@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 
-
 # Define plotting functions for models
 
 #Exponential Growth
@@ -75,6 +74,7 @@ def SBW(x0, R, k, t_max, dt):
     plt.show()
 
 #Enzyme-Reaction
+
 def ERS(x0, y0, a, b, t_max, dt):
     Xs = [x0]
     Ys = [y0]
