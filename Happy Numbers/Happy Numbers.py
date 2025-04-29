@@ -39,7 +39,8 @@ def happy_to_999():
                     sad.extend(seq)
                     t = False
                 else:
-                    seq.append(new)
+                    seq.append(new)              
+                    
     return(happy)
 
 # Define a function that will populate number 1000 through imax
