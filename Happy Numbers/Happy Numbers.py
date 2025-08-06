@@ -83,12 +83,13 @@ if __name__ == '__main__':
         numb = input('What number would you like to check? ')
         if numb=='a':
             break
-        numb=int(numb)
-        if numb>imax:
-            print('Number out of range')
-        elif happy_array[numb]==1:
+        t=int(numb)
+        if t>imax:
+            while t>imax:
+                t=step(t)
+        if happy_array[t]==1:
             print(f"{numb} is a happy number!")
-        elif happy_array[numb]==0:
+        elif happy_array[t]==0:
             print(f"{numb} is not a happy number :(")
         else:
             print('error')
