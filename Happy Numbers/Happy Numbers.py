@@ -65,16 +65,30 @@ if __name__ == '__main__':
     
     # Squares of digits from 0 to 9
     squares = [i**2 for i in range(10)]
-    happy_array = bytearray(imax)  #Creates a byte array of length imax
+    happy_array = bytearray(imax+1)  #Creates a byte array of length imax
     
     # Populate the happy array for numbers 1 through 999
     populate_happy_array1(happy_to_999())
     
     # Call the optimized function
-    populate_happy_array2(happy_array, imax)
+    populate_happy_array2(happy_array, imax+1)
         
     t_end = time.time()
     print(t_end - t_start)
 
     #with open("happy_array.pkl", "wb") as file:
     #    pickle.dump(happy_array, file)
+    
+    while True:
+        numb = input('What number would you like to check? ')
+        if numb=='a':
+            break
+        numb=int(numb)
+        if numb>imax:
+            print('Number out of range')
+        elif happy_array[numb]==1:
+            print(f"{numb} is a happy number!")
+        elif happy_array[numb]==0:
+            print(f"{numb} is not a happy number :(")
+        else:
+            print('error')
