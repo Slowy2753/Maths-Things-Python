@@ -57,6 +57,24 @@ def populate_happy_array2(happy_array, imax):
             happy_array[i] = True
 
 
+def is_happy(numb,imax):
+    t=int(numb)
+    if t>imax:
+        while t>imax:
+            t=step(t)
+    if happy_array[t]==1:
+        return(f"is a happy number!")
+    elif happy_array[t]==0:
+        return(f"is not a happy number :(")
+    else:
+        return('caused an error')#
+            
+def str_step(n):
+    result = 0
+    for i in range(0,len(n)):
+        result += int(n[i])**2
+    return(result)
+
 if __name__ == '__main__':
     
     t_start = time.time()
@@ -80,16 +98,15 @@ if __name__ == '__main__':
     #    pickle.dump(happy_array, file)
     
     while True:
-        numb = input('What number would you like to check? ')
+        numb = str(input('What number would you like to check? '))
+        numb_original = numb
         if numb=='a':
             break
-        t=int(numb)
-        if t>imax:
-            while t>imax:
-                t=step(t)
-        if happy_array[t]==1:
-            print(f"{numb} is a happy number!")
-        elif happy_array[t]==0:
-            print(f"{numb} is not a happy number :(")
+        if len(numb)<=10:
+            print(f"{numb_original} {is_happy(numb, imax)}")
         else:
-            print('error')
+            while len(numb)>10:
+                numb = str(str_step(numb))
+            print(f"{numb_original} {is_happy(numb, imax)}")
+            
+                
