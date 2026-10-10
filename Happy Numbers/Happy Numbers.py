@@ -11,6 +11,24 @@ def step(n):
         n //= 10
     return result
 
+@njit
+def get_bit(arr, i):
+    # byte that contains bit i is i//8
+    # bit position (from right) is i % 8
+    # we shift the binary right by bit position and check divisbility by 2
+    return (int(arr[i // 8]) >> (7 - i % 8)) % 2
+
+@njit
+def set_bit(arr, i, new):
+    current = get_bit(arr, i)
+
+    if new == current:
+        break
+    elif current == 0 and new == 1:
+        arr[i // 8] = int(arr[i // 8]) + (256 >> i % 8)
+    elif current == 1 and new == 0:
+        arr[i // 8] = int(arr[i // 8]) - (256 >> i % 8)
+
 # Defines a function that returns all the happy numbers between 1 and 999
 # @njit (Works but is slower)
 def happy_to_999():
