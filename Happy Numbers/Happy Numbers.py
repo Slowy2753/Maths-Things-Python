@@ -65,66 +65,35 @@ def happy_to_999():
 def populate_happy_array1(happy):
     for i in range(1, 1000):
         if i in happy:
-            happy_array[i] = True      
+            set_bit(happy_array, i, 1)    
 
 # Define a function that will populate number 1000 through imax       
 @njit
 def populate_happy_array2(happy_array, imax):
-    for i in range(1000, imax):
-        if happy_array[step(i)]:  # Reference precomputed happy numbers
-            happy_array[i] = True
+    for i in range(1000, imax + 1):
+        # as step_2(n) < n for n > 999 we can do one step and check happiness
+        if get_bit(happy_array, step_2(i)) == 1:   # reference precomputed results
+            set_bit(happy_array, i, 1)
 
-
-def is_happy(numb,imax):
-    t=int(numb)
-    if t>imax:
-        while t>imax:
-            t=step(t)
-    if happy_array[t]==1:
-        return(f"is a happy number!")
-    elif happy_array[t]==0:
-        return(f"is not a happy number :(")
-    else:
-        return('caused an error')#
-            
-def str_step(n):
-    result = 0
-    for i in range(0,len(n)):
-        result += int(n[i])**2
-    return(result)
 
 if __name__ == '__main__':
     
     t_start = time.time()
     
     imax = 10**10
+    imax += 8 - imax % 8
     
-    # Squares of digits from 0 to 9
-    squares = [i**2 for i in range(10)]
-    happy_array = bytearray(imax+1)  #Creates a byte array of length imax
+    happy_array = np.zeros(imax / 8, dtype=np.uint8)
     
     # Populate the happy array for numbers 1 through 999
     populate_happy_array1(happy_to_999())
     
     # Call the optimized function
-    populate_happy_array2(happy_array, imax+1)
+    populate_happy_array2(happy_array, imax)
         
     t_end = time.time()
     print(t_end - t_start)
 
-    #with open("happy_array.pkl", "wb") as file:
-    #    pickle.dump(happy_array, file)
-    
-    while True:
-        numb = str(input('What number would you like to check? '))
-        numb_original = numb
-        if numb=='a':
-            break
-        if len(numb)<=10:
-            print(f"{numb_original} {is_happy(numb, imax)}")
-        else:
-            while len(numb)>10:
-                numb = str(str_step(numb))
-            print(f"{numb_original} {is_happy(numb, imax)}")
+    happy_array.tofile("happy_array.bits") 
             
                 
