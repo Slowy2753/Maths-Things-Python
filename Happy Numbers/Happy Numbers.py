@@ -1,3 +1,4 @@
+import os
 import time
 import numpy as np
 from numba import njit
@@ -62,9 +63,9 @@ def happy_to_999():
     return(happy)
 
 # Define a function that will populate number 1000 through imax
-def populate_happy_array1(happy):
-    for i in range(1, 1000):
-        if i in happy:
+def populate_happy_array1(happy_array, happy_999):
+    for i in range(1, 999):
+        if i in happy_999:
             set_bit(happy_array, i, 1)    
 
 # Define a function that will populate number 1000 through imax       
@@ -75,25 +76,24 @@ def populate_happy_array2(happy_array, imax):
         if get_bit(happy_array,step(i)) == 1:   # reference precomputed results
             set_bit(happy_array, i, 1)
 
+def create_happy_array(imax):
+    n_bytes = (imax + 7) // 8 
+    happy_array = np.zeros(n_bytes, dtype=np.uint8)
+    populate_happy_array1(happy_array, happy_to_999())
+    populate_happy_array2(happy_array, n_bytes*8)
+    return happy_array
 
 if __name__ == '__main__':
     
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(script_dir, "happy_array.bits")
+
     t_start = time.time()
-    
-    imax = 10**9
-    n_bytes = (imax + 7) // 8 
-    happy_array = np.zeros(n_bytes, dtype=np.uint8)
-    
-    # Populate the happy array for numbers 1 through 999
-    populate_happy_array1(happy_to_999())
-    
-    # Call the optimized function
-    populate_happy_array2(happy_array, n_bytes*8)
         
+    imax = 10**9
+    happy_array = create_happy_array(imax)
+            
     t_end = time.time()
     print(t_end - t_start)
 
-    import os
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    path = os.path.join(script_dir, "happy_array.bits")
-    happy_array.tofile(path)
+    #happy_array.tofile(path)
