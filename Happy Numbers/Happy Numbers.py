@@ -90,7 +90,7 @@ if __name__ == '__main__':
 
     t_start = time.time()
         
-    imax = 10**9
+    imax = 10**10
     happy_array = create_happy_array(imax)
             
     t_end = time.time()
