@@ -1,4 +1,5 @@
 import time
+import numpy as np
 from numba import njit
 
 # step is converted into c machiene code to run more quickly
@@ -22,11 +23,11 @@ def set_bit(arr, i, new):
     current = get_bit(arr, i)
 
     if new == current:
-        break
+        return
     elif current == 0 and new == 1:
-        arr[i // 8] = int(arr[i // 8]) + (256 >> i % 8)
+        arr[i // 8] = int(arr[i // 8]) + (128 >> i % 8)
     elif current == 1 and new == 0:
-        arr[i // 8] = int(arr[i // 8]) - (256 >> i % 8)
+        arr[i // 8] = int(arr[i // 8]) - (128 >> i % 8)
 
 # Defines a function that returns all the happy numbers between 1 and 999
 # @njit (Works but is slower)
@@ -69,9 +70,9 @@ def populate_happy_array1(happy):
 # Define a function that will populate number 1000 through imax       
 @njit
 def populate_happy_array2(happy_array, imax):
-    for i in range(1000, imax + 1):
+    for i in range(1000, imax):
         # as step_2(n) < n for n > 999 we can do one step and check happiness
-        if get_bit(happy_array, step_2(i)) == 1:   # reference precomputed results
+        if get_bit(happy_array,step(i)) == 1:   # reference precomputed results
             set_bit(happy_array, i, 1)
 
 
@@ -80,19 +81,20 @@ if __name__ == '__main__':
     t_start = time.time()
     
     imax = 10**10
-    imax += 8 - imax % 8
-    
-    happy_array = np.zeros(imax / 8, dtype=np.uint8)
+    n_bytes = (imax + 7) // 8 
+    happy_array = np.zeros(n_bytes, dtype=np.uint8)
     
     # Populate the happy array for numbers 1 through 999
     populate_happy_array1(happy_to_999())
     
     # Call the optimized function
-    populate_happy_array2(happy_array, imax)
+    populate_happy_array2(happy_array, n_bytes*8)
         
     t_end = time.time()
     print(t_end - t_start)
 
-    happy_array.tofile("happy_array.bits") 
-            
-                
+    import os
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(script_dir, "happy_array.bits")
+    happy_array.tofile(path)
+    print(path, os.path.getsize(path), "bytes") 
