@@ -80,7 +80,7 @@ if __name__ == '__main__':
     
     t_start = time.time()
     
-    imax = 10**10
+    imax = 10**9
     n_bytes = (imax + 7) // 8 
     happy_array = np.zeros(n_bytes, dtype=np.uint8)
     
@@ -97,4 +97,3 @@ if __name__ == '__main__':
     script_dir = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(script_dir, "happy_array.bits")
     happy_array.tofile(path)
-    print(path, os.path.getsize(path), "bytes") 
